@@ -13,12 +13,16 @@ import co.newlabs.repository.order.OrderEntity;
 import co.newlabs.repository.order.OrderRepository;
 import co.newlabs.repository.product.ProductRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class OrderService {
@@ -37,8 +41,16 @@ public class OrderService {
     public OrderDTO getOrderFullDetails(final long id) {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         OrderDTO order = getOrder(orderEntity);
-        order.setAccount(mapper.map(account.getAccountById(orderEntity.getAccountId()), AccountDTO.class));
-        order.setTracking(mapper.map(tracking.getTrackingDetailsByOrderId(id), TrackingDTO.class));
+        try {
+            order.setAccount(mapper.map(account.getAccountById(orderEntity.getAccountId()), AccountDTO.class));
+        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+            log.warn(ex.getMessage());
+        }
+        try {
+            order.setTracking(mapper.map(tracking.getTrackingDetailsByOrderId(id), TrackingDTO.class));
+        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+            log.warn(ex.getMessage());
+        }
 
         return order;
     }
