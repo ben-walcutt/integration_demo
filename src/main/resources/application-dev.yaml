@@ -5,3 +5,7 @@ spring:
 urls:
   account: https://accounts.somecompany.com/accounts/
   tracking: https://tracking.somecompany.com/tracking/order/
+
+logging:
+  level:
+    root: DEBUG
