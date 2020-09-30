@@ -1,3 +1,0 @@
-urls:
-  account: http://localhost:${wiremock.server.port}/accounts/
-  tracking: http://localhost:${wiremock.server.port}/tracking/order/
