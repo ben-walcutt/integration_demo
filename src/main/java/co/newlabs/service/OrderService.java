@@ -33,12 +33,12 @@ public class OrderService {
     private TrackingClient tracking;
     private MapperFacade mapper;
 
-    public OrderDTO getOrder2(final long id) {
+    public OrderDTO getOrder(final long id) {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         return getOrder(orderEntity);
     }
 
-    public OrderDTO getOrder(final long id) {
+    public OrderDTO getOrderTest(final long id) {
         return OrderDTO.builder()
                 .orderNumber(id)
                 .build();

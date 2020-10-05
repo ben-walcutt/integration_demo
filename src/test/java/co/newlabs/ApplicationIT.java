@@ -57,6 +57,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
+        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
         Response response = request.get("/orders/1");
 
         // assert
@@ -90,6 +91,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
+        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
         Response response = request.get("/orders/2");
 
         // assert
@@ -142,6 +144,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
+        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
         Response response = request.get("/orders/1/full");
 
         // assert
@@ -229,6 +232,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
+        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
         Response response = request.get("/orders/1/full");
 
         // assert

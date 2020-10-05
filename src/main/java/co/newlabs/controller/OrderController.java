@@ -16,6 +16,11 @@ import org.springframework.web.client.HttpServerErrorException;
 public class OrderController {
     private OrderService service;
 
+    @GetMapping("/{id}/test")
+    public ResponseEntity<OrderDTO> getOrderDetailsTest(@PathVariable long id) {
+        return ResponseEntity.ok(service.getOrderTest(id));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderDetails(@PathVariable long id) {
         return ResponseEntity.ok(service.getOrder(id));
