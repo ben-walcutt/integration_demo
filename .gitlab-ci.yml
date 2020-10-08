@@ -1,0 +1,51 @@
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+services:
+  - docker:dind
+
+cache:
+  paths:
+    - ./.m2/repository
+
+stages:
+  - build
+  - test
+  - release
+
+build_job:
+  stage: build
+  image: maven:3.5.0-jdk-8
+  script:
+    - mvn compile
+  artifacts:
+    paths:
+      - target/*
+    expire_in: 5min
+
+test_job:
+  stage: test
+  image: maven:3.5.0-jdk-8
+  dependencies:
+    - build_job
+  script:
+    - mvn package
+  artifacts:
+    paths:
+      - target/*
+    expire_in: 5min
+
+release_job:
+  stage: release
+  image: docker:stable
+  dependencies:
+    - test_job
+  services:
+    - docker:dind
+  script:
+    - docker version
+    - docker login -u $DOCKER_USERNAME_2 -p $DOCKER_PASSWORD_2
+    - docker build -t benwalcutt/intdemo:$CI_COMMIT_SHA -t benwalcutt/intdemo:latest .
+    - docker push benwalcutt/intdemo:$CI_COMMIT_SHA
+    - docker push benwalcutt/intdemo:latest

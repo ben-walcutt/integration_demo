@@ -8,6 +8,8 @@ import co.newlabs.dto.OrderDTO;
 import co.newlabs.dto.ProductDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -21,10 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -44,11 +49,21 @@ public class ApplicationIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private String token;
+
     @Before
     public void setUp() {
         wireMockServer.resetAll();
         RestAssured.port = REST_ASSURED_PORT_NUMBER;
         RestAssured.baseURI = "http://localhost:" + REST_ASSURED_PORT_NUMBER;
+
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
+        token = Jwts.builder()
+                .setSubject("testuser")
+                .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 10)))
+                .setAudience(authority.getAuthority())
+                .signWith(SignatureAlgorithm.HS256, "somesecret".getBytes())
+                .compact();
     }
 
     @Test
@@ -57,7 +72,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
-        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
+        request.header("Authorization", "Bearer " + token);
         Response response = request.get("/orders/1");
 
         // assert
@@ -91,7 +106,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
-        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
+        request.header("Authorization", "Bearer " + token);
         Response response = request.get("/orders/2");
 
         // assert
@@ -144,7 +159,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
-        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
+        request.header("Authorization", "Bearer " + token);
         Response response = request.get("/orders/1/full");
 
         // assert
@@ -232,7 +247,7 @@ public class ApplicationIT {
 
         // act
         RequestSpecification request = RestAssured.given();
-        request.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjAxOTMyOTg2LCJhdWQiOiJST0xFX0FETUlOIn0.0NfqTGwzun_OgUidhkCjPRojLp8AC9E8Zy38QRGuYcU");
+        request.header("Authorization", "Bearer " + token);
         Response response = request.get("/orders/1/full");
 
         // assert
