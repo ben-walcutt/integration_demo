@@ -36,6 +36,18 @@ test_job:
       - target/*
     expire_in: 5min
 
+verify_job:
+  stage: test
+  image: maven:3.5.0-jdk-8
+  dependencies:
+    - build_job
+  script:
+    - mvn verify
+  artifacts:
+    paths:
+      - target/*
+    expire_in: 5min
+
 release_job:
   stage: release
   image: docker:stable
