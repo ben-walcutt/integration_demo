@@ -52,7 +52,7 @@ release_job:
   stage: release
   image: docker:stable
   dependencies:
-    - test_job
+    - unit_test_job
   services:
     - docker:dind
   script:
