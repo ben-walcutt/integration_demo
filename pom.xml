@@ -141,20 +141,36 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
+          <skipTests>true</skipTests>
         </configuration>
         <executions>
           <execution>
-            <id>integration-test</id>
+            <id>unit-tests</id>
             <phase>test</phase>
             <goals>
               <goal>test</goal>
             </goals>
             <configuration>
-              <skip>false</skip>
+              <skipTests>false</skipTests>
+              <includes>
+                <include>**/*Tests.java</include>
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>integration-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
               <enableAssertions>false</enableAssertions>
               <includes>
                 <include>**/*IT.java</include>
               </includes>
+              <excludes>
+                <exclude>**/*Tests.java</exclude>
+              </excludes>
               <skipTests>false</skipTests>
             </configuration>
           </execution>
